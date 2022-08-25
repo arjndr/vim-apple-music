@@ -16,9 +16,25 @@ function ReplaceIdentifiers(info)
 	else
 		let l:playback_character = g:applemusic_play_character
 	endif
-  let l:temp_applemusic_status = substitute(g:applemusic_status_template, '{status}', l:playback_character, 'g')
+
+	if get(track_details, 'disliked') == 'true'
+		let l:disliked_character = g:applemusic_disliked_character
+	else
+		let l:disliked_character = ''
+
+		"  It can only be loved if it's not disliked, I think?
+		if get(track_details, 'loved') == 'true'
+			let l:loved_character = g:applemusic_loved_character
+		else
+			let l:loved_character = g:applemusic_unloved_character
+		endif
+	endif
+
+  let l:temp_applemusic_status = substitute(g:applemusic_status_template, '{status}', substitute(l:playback_character, '&', '\\&', 'g'), 'g')
   let l:temp_applemusic_status = substitute(l:temp_applemusic_status, '{title}', substitute(get(track_details, 'title'), '&', '\\&', 'g'), 'g')
   let l:temp_applemusic_status = substitute(l:temp_applemusic_status, '{artist}', substitute(get(track_details, 'artist'), '&', '\\&', 'g'), 'g')
+  let l:temp_applemusic_status = substitute(l:temp_applemusic_status, '{loved}', substitute(l:loved_character, '&', '\\&', 'g'), 'g')
+  let l:temp_applemusic_status = substitute(l:temp_applemusic_status, '{disliked}', substitute(l:disliked_character, '&', '\\&', 'g'), 'g')
   return l:temp_applemusic_status
 endfunction
 

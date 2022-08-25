@@ -58,36 +58,43 @@ Use the `g:applemusic_status` variable to show Apple Music status anywhere that'
 | **Variable**             | **Description**     |
 |--------------------------|---------------------|
 | `status`                 | Playback status of Apple Music (will be replaced with play / pause icons appropriately) |
-| `title`                  | Title of currently playing media               |
-| `artist`                 | Artist of currently playing media              |
+| `title`                  | Title of currently playing media                    |
+| `artist`                 | Artist of currently playing media                   |
+| `album`                  | Album of currently playing media                    |
+| `artist`                 | Artist of currently playing media                   |
+| `loved`                  | If the currently playing media is favorited by user |
+| `disliked`               | If the currently playing media is disliked by user  |
 
 #### Custom icons:
 
-You can have custom icons (or text) for playback status and liked/disliked status by setting the `g:applemusic_play_character` and `g:applemusic_pause_character` variables
+You can have custom icons (or text) for playback status and liked/disliked status by setting the `g:applemusic_play_character`, `g:applemusic_pause_character`, `g:applemusic_loved_character`, `g:applemusic_unloved_character`, `g:applemusic_disliked_character` variables
 
 Here's an example:
 
 ```vim
-" using any nerd font icon would be prettier :)
+" using any icon would be prettier :)
 let g:applemusic_play_character = 'Paused'
 let g:applemusic_pause_character = 'Playing'
+
+let g:applemusic_loved_character = 'Loved'
+let g:applemusic_unloved_character = 'Not loved yet'
+
+let g:applemusic_disliked_character = 'Disliked >:('
 ```
 
 ### Commands
 
-- `:amp` - Play/Pause media.
+- `:AMP` - Play/Pause media.
 
-- `:amn` - Equivalent to pressing the next button.
+- `:AMN` - Equivalent to pressing the next button.
 
-- `:ampr` - Equivalent to pressing the previous button.
+- `:AMPr` - Equivalent to pressing the previous button.
 
-- `:ama` - Add currently playing media to library.
+- `:AMF` - Favorite/heart currently playing media.
 
-- `:amf` - Favorite/heart currently playing media.
+- `:AMD` - Dislike currently playing media.
 
-- `:amd` - Dislike currently playing media.
-
-- `:amds` - Dislike and skip currently playing media.
+- `:AMDS` - Dislike and skip currently playing media.
 
 ### Credits
 

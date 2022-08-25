@@ -2,8 +2,6 @@ let s:applemusic_toggle_script = ['if application "Music" is running then', 'tel
 let s:applemusic_next_script = ['if application "Music" is running then', 'tell application "Music"', 'next track', 'end tell', 'end if']
 let s:applemusic_previous_script = ['if application "Music" is running then', 'tell application "Music"', 'previous track', 'end tell', 'end if']
 
-let s:applemusic_add_to_library_script = 'scripts/add_to_library.applescript'
-
 let s:applemusic_favorite_script = ['tell application "Music"', 'if loved of current track then', 'set loved of current track to false', 'else', 'set loved of current track to true', 'end if', 'end tell']
 let s:applemusic_dislike_script = ['on run argv', 'set skip to item 1 of argv as boolean', 'tell application "Music"', 'if disliked of current track then', 'set disliked of current track to false', 'else', 'set disliked of current track to true', 'if skip then', 'next track', 'end if', 'end if', 'end tell', 'end run']
 
@@ -33,6 +31,7 @@ function ReplaceIdentifiers(info)
   let l:temp_applemusic_status = substitute(g:applemusic_status_template, '{status}', substitute(l:playback_character, '&', '\\&', 'g'), 'g')
   let l:temp_applemusic_status = substitute(l:temp_applemusic_status, '{title}', substitute(get(track_details, 'title'), '&', '\\&', 'g'), 'g')
   let l:temp_applemusic_status = substitute(l:temp_applemusic_status, '{artist}', substitute(get(track_details, 'artist'), '&', '\\&', 'g'), 'g')
+  let l:temp_applemusic_status = substitute(l:temp_applemusic_status, '{album}', substitute(get(track_details, 'album'), '&', '\\&', 'g'), 'g')
   let l:temp_applemusic_status = substitute(l:temp_applemusic_status, '{loved}', substitute(l:loved_character, '&', '\\&', 'g'), 'g')
   let l:temp_applemusic_status = substitute(l:temp_applemusic_status, '{disliked}', substitute(l:disliked_character, '&', '\\&', 'g'), 'g')
   return l:temp_applemusic_status

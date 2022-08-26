@@ -2,6 +2,8 @@
 
 View Apple Music media playback status, control playback and favorite songs, all while never leaving Vim (**on macOS only**)
 
+![Screenshot](screenshots/1.png)
+
 ### Requirements
 
 1. Vim 8 or Neovim
@@ -15,9 +17,6 @@ You can probably use any plugin manager to install, just follow their documentat
 ```vim
 Plug 'arjndr/vim-apple-music'
 ```
-
-##### Manual Installation
-TODO
 
 ### Setup
 
@@ -62,7 +61,6 @@ Use the `g:applemusic_status` variable to show Apple Music status anywhere that'
 | `title`                  | Title of currently playing media                                                        |
 | `artist`                 | Artist of currently playing media                                                       |
 | `album`                  | Album of currently playing media                                                        |
-| `artist`                 | Artist of currently playing media                                                       |
 | `loved`                  | If the currently playing media is favorited by user                                     |
 | `disliked`               | If the currently playing media is disliked by user                                      |
 
@@ -73,7 +71,7 @@ You can have custom icons (or text) for playback status and liked/disliked statu
 Here's an example:
 
 ```vim
-" using any icon would be prettier :)
+" using an icon would be prettier :)
 let g:applemusic_play_character = 'Paused'
 let g:applemusic_pause_character = 'Playing'
 

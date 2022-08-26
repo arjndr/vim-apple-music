@@ -19,7 +19,7 @@ function Escape(text)
 endfunction
 
 function ReplaceIdentifiers(info)
-  let track_details = json_decode(a:info)
+	let track_details = json_decode(a:info)
 	if get(track_details, 'state') == 'playing'
 		let l:playback_character = g:applemusic_pause_character
 	else
@@ -39,13 +39,13 @@ function ReplaceIdentifiers(info)
 		endif
 	endif
 
-  let l:temp_applemusic_status = substitute(g:applemusic_status_template, '{status}', substitute(l:playback_character, '&', '\\&', 'g'), 'g')
-  let l:temp_applemusic_status = substitute(l:temp_applemusic_status, '{title}', substitute(get(track_details, 'title'), '&', '\\&', 'g'), 'g')
-  let l:temp_applemusic_status = substitute(l:temp_applemusic_status, '{artist}', substitute(get(track_details, 'artist'), '&', '\\&', 'g'), 'g')
-  let l:temp_applemusic_status = substitute(l:temp_applemusic_status, '{album}', substitute(get(track_details, 'album'), '&', '\\&', 'g'), 'g')
-  let l:temp_applemusic_status = substitute(l:temp_applemusic_status, '{loved}', substitute(l:loved_character, '&', '\\&', 'g'), 'g')
-  let l:temp_applemusic_status = substitute(l:temp_applemusic_status, '{disliked}', substitute(l:disliked_character, '&', '\\&', 'g'), 'g')
-  return l:temp_applemusic_status
+	let l:temp_applemusic_status = substitute(g:applemusic_status_template, '{status}', substitute(l:playback_character, '&', '\\&', 'g'), 'g')
+	let l:temp_applemusic_status = substitute(l:temp_applemusic_status, '{title}', substitute(get(track_details, 'title'), '&', '\\&', 'g'), 'g')
+	let l:temp_applemusic_status = substitute(l:temp_applemusic_status, '{artist}', substitute(get(track_details, 'artist'), '&', '\\&', 'g'), 'g')
+	let l:temp_applemusic_status = substitute(l:temp_applemusic_status, '{album}', substitute(get(track_details, 'album'), '&', '\\&', 'g'), 'g')
+	let l:temp_applemusic_status = substitute(l:temp_applemusic_status, '{loved}', substitute(l:loved_character, '&', '\\&', 'g'), 'g')
+	let l:temp_applemusic_status = substitute(l:temp_applemusic_status, '{disliked}', substitute(l:disliked_character, '&', '\\&', 'g'), 'g')
+	return l:temp_applemusic_status
 endfunction
 
 "  Credits to https://github.com/skywind3000/asyncrun.vim
@@ -65,7 +65,7 @@ function! applemusic#run_script(filename, content, args)
 		return jobstart(cmd)
 	else
 		return job_start(cmd)
-  endif
+	endif
 endfunction
 
 let s:old_result = ''
@@ -90,7 +90,7 @@ function! applemusic#watch(args)
 		endfunction
 
 		call jobstart(cmd, { 'on_stdout': function('s:OnEvent') })
-  else
+	else
 		function! JobCallback(channel, data)
 			let result = a:data
 			if s:old_result == result
@@ -105,8 +105,9 @@ function! applemusic#watch(args)
 				endif
 			endif
 		endfunction
-    call job_start(cmd, { 'out_cb': 'JobCallback' })
-  endif
+
+		call job_start(cmd, { 'out_cb': 'JobCallback' })
+	endif
 endfunction
 
 function! applemusic#PlayPause()
@@ -119,10 +120,6 @@ endfunction
 
 function! applemusic#Previous()
 	call applemusic#run_script('previous.scpt', s:applemusic_previous_script, '')
-endfunction
-
-function! applemusic#AddToLibrary()
-	echo 'Not implemented yet'
 endfunction
 
 function! applemusic#Favorite()

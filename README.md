@@ -4,7 +4,7 @@ View Apple Music media playback status, control playback and favorite songs, all
 
 ### Requirements
 
-1. Vim 8+ or Neovim
+1. Vim 8 or Neovim
 2. macOS
 3. Apple Music (not iTunes)
 
@@ -28,6 +28,7 @@ You can use `g:applemusic_status` variable to get the Apple Music playback statu
 ```vim
 " Run this in Vim command
 set statusline = %{applemusic_status}
+set laststatus = 2
 ```
 
 - Showing Apple Music in lualine:
@@ -53,17 +54,17 @@ let g:applemusic_headless = 1
 
 ### Customization
 
-Use the `g:applemusic_status` variable to show Apple Music status anywhere that's supported. Custom templates can be used to modify status text if you don't like the default template. Available variables are:
+Use the `g:applemusic_status` variable to show Apple Music status anywhere that's supported. Custom templates can be used to modify status text if you don't like the default template. Available identifiers are:
 
-| **Variable**             | **Description**     |
+| **Identifier**           | **Description**     |
 |--------------------------|---------------------|
 | `status`                 | Playback status of Apple Music (will be replaced with play / pause icons appropriately) |
-| `title`                  | Title of currently playing media                    |
-| `artist`                 | Artist of currently playing media                   |
-| `album`                  | Album of currently playing media                    |
-| `artist`                 | Artist of currently playing media                   |
-| `loved`                  | If the currently playing media is favorited by user |
-| `disliked`               | If the currently playing media is disliked by user  |
+| `title`                  | Title of currently playing media                                                        |
+| `artist`                 | Artist of currently playing media                                                       |
+| `album`                  | Album of currently playing media                                                        |
+| `artist`                 | Artist of currently playing media                                                       |
+| `loved`                  | If the currently playing media is favorited by user                                     |
+| `disliked`               | If the currently playing media is disliked by user                                      |
 
 #### Custom icons:
 

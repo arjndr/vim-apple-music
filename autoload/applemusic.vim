@@ -7,6 +7,17 @@ let s:applemusic_dislike_script = ['on run argv', 'set skip to item 1 of argv as
 
 let s:applemusic_current_track_script = ['if application "Music" is running then', 'tell application "Music"', 'set track_info to "{\"artist\":\""', 'set track_info to track_info & artist of current track & "\",\"title\":\""', 'set track_info to track_info & name of current track & "\",\"album\":\""', 'set track_info to track_info & album of current track & "\",\"kind\":\""', 'set track_info to track_info & media kind of current track & "\",\"state\":\""', 'set track_info to track_info & player state & "\",\"volume\":\""', 'set track_info to track_info & sound volume & "\",\"muted\":\""', 'set track_info to track_info & mute & "\",\"shuffle\":\""', 'set track_info to track_info & shuffle enabled & "\",\"repeat\":\""', 'set track_info to track_info & song repeat & "\",\"loved\":\""', 'set track_info to track_info & loved of current track & "\",\"disliked\": "', 'set track_info to track_info & disliked of current track & ",\"lyrics\": \""', 'set track_info to track_info & lyrics of current track & "\"}"', 'return track_info', 'end tell', 'end if']
 
+function Escape(text)
+	" For some reason shellescape(tmpname) does
+	" not  play nicely with job_start in Vim
+
+	if has('nvim')
+		return shellescape(a:text)
+	else
+		return a:text
+	endif
+endfunction
+
 function ReplaceIdentifiers(info)
   let track_details = json_decode(a:info)
 	if get(track_details, 'state') == 'playing'
@@ -47,19 +58,21 @@ endfunction
 
 function! applemusic#run_script(filename, content, args)
 	let tmpname = applemusic#script_write(a:filename, a:content)
+	let cmd = '/usr/bin/osascript ' . Escape(tmpname) . Escape(a:args)
+
 	"  echo tmpname
-	let cmd = '/usr/bin/osascript ' . shellescape(tmpname) . shellescape(a:args)
 	if has("nvim")
-		return jobstart(cmd, s:callbacks)
-  else
-    return job_start(cmd)
+		return jobstart(cmd)
+	else
+		return job_start(cmd)
   endif
 endfunction
 
 let s:old_result = ''
 function! applemusic#watch(args)
 	let tmpname = applemusic#script_write('track_details.scpt', s:applemusic_current_track_script)
-	let cmd = '/usr/bin/osascript ' . shellescape(tmpname)
+	let cmd = '/usr/bin/osascript ' . Escape(tmpname)
+
 	if has("nvim")
 		function! s:OnEvent(job_id, data, event) dict
 			let result = join(a:data)
@@ -76,12 +89,23 @@ function! applemusic#watch(args)
 			endif
 		endfunction
 
-		let s:callbacks = {
-		\ 'on_stdout': function('s:OnEvent'),
-		\ }
-		let job_id = jobstart(cmd, s:callbacks)
+		call jobstart(cmd, { 'on_stdout': function('s:OnEvent') })
   else
-    return job_start(cmd)
+		function! JobCallback(channel, data)
+			let result = a:data
+			if s:old_result == result
+			else
+				"  Check if result is empty string.
+				if result == ''
+				else
+					let s:old_result = result
+					let g:applemusic_status = ReplaceIdentifiers(result)
+					"  Apparently refreshes statusline, not sure tho. (https://vi.stackexchange.com/a/17876)
+					let &stl=&stl
+				endif
+			endif
+		endfunction
+    call job_start(cmd, { 'out_cb': 'JobCallback' })
   endif
 endfunction
 
